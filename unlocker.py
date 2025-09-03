@@ -1,3 +1,24 @@
+"""
+Apache License 2.0
+Copyright (c) 2025 Chamindu Gayanuka
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Telegram Link : https://t.me/GwitcherG
+Repo Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate
+License Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate/blob/main/LICENSE
+"""
+
 from tkinter import messagebox, filedialog
 import customtkinter as ctk
 from PIL import Image
@@ -85,6 +106,12 @@ def unlock_action():
         return
     remove_pptx_modify_password(selected_file, progress_bar)
 
+
+"""
+Apache License 2.0
+Copyright (c) 2025 Chamindu Gayanuka
+"""
+
 # ================= UI =================
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("green")
@@ -147,6 +174,14 @@ progress_bar.place(relx=0.5, rely=0.88, anchor="center")
 progress_bar.set(0)
 
 # Footer
+"""
+Don't remove the footer, it's my signature. 💗
+Keep it or give credit. 😊
+Telegram Link : https://t.me/GwitcherG
+Repo Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate
+License Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate/blob/main/LICENSE
+Thank you! 🙏
+"""
 footer = ctk.CTkLabel(app, text="💗 Made by Chamindu Gayanuka 💗",
     font=ctk.CTkFont(size=18, family="Times New Roman"), text_color="red", bg_color="#b4bddd")
 footer.place(relx=0.5, rely=0.95, anchor="center")
