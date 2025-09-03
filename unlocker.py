@@ -18,6 +18,7 @@ Telegram Link : https://t.me/GwitcherG
 Repo Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate
 License Link : https://github.com/Chamindu-Gayanuka/PPTX-Password-Remover-Automate/blob/main/LICENSE
 """
+_version_ = "v1.0.0"
 
 from tkinter import messagebox, filedialog
 import customtkinter as ctk
