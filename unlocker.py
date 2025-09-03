@@ -23,11 +23,21 @@ _version_ = "v1.0.0"
 from tkinter import messagebox, filedialog
 import customtkinter as ctk
 from PIL import Image
-import os, re, shutil, zipfile
+import os, re, shutil, zipfile, sys
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 selected_file = None
 
+# ================== RESOURCE PATH ==================
+def resource_path(relative_path: str) -> str:
+    """ Get absolute path to resource (for dev & PyInstaller) """
+    try:
+        base_path = sys._MEIPASS  # PyInstaller temp folder
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+# ================== CORE FUNCTION ==================
 def remove_pptx_modify_password(file_path, progress):
     try:
         progress.set(0)
@@ -79,6 +89,7 @@ def remove_pptx_modify_password(file_path, progress):
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+# ================== FILE HANDLERS ==================
 def drop_file(event):
     file_path = event.data.strip('{}')
     set_selected_file(file_path)
@@ -107,19 +118,18 @@ def unlock_action():
         return
     remove_pptx_modify_password(selected_file, progress_bar)
 
-
 """
 Apache License 2.0
 Copyright (c) 2025 Chamindu Gayanuka
 """
 
-# ================= UI =================
+# ================== UI ==================
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("green")
 
 app = TkinterDnD.Tk()
 app.title(" PPTX Unlocker")
-app.iconbitmap("asset/icon.ico")
+app.iconbitmap(resource_path("asset/icon.ico"))
 width=500
 height=400
 x = (app.winfo_screenwidth() // 2) - (width // 2)
@@ -129,14 +139,14 @@ app.resizable(False, False)
 
 # Background
 bg_image = ctk.CTkImage(
-    light_image=Image.open("asset/background.png"),
+    light_image=Image.open(resource_path("asset/background.png")),
     size=(500, 400)
 )
 bg_label = ctk.CTkLabel(app, image=bg_image, text="")
 bg_label.place(relx=0.5, rely=0.5, anchor="center")
 
 # Header
-lock_icon = ctk.CTkImage(Image.open("asset/locker.png"), size=(30, 30))
+lock_icon = ctk.CTkImage(Image.open(resource_path("asset/locker.png")), size=(30, 30))
 header = ctk.CTkLabel(app, text=" PPTX Unlocker", image=lock_icon,
     compound="left", font=ctk.CTkFont(size=30, weight="bold", family="Times New Roman"), bg_color="#D9F4C6")
 header.place(relx=0.5, rely=0.07, anchor="center")
@@ -146,7 +156,7 @@ sub_text = ctk.CTkLabel(app, text="Remove password protection from PowerPoint fi
 sub_text.place(relx=0.5, rely=0.15, anchor="center")
 
 # Drop area
-file_icon = ctk.CTkImage(Image.open("asset/file.png"), size=(40, 40))
+file_icon = ctk.CTkImage(Image.open(resource_path("asset/file.png")), size=(40, 40))
 drop_frame = ctk.CTkFrame(app, width=400, height=120, fg_color="white", corner_radius=12, border_width=2, bg_color="#B7E6F3")
 drop_frame.place(relx=0.5, rely=0.4, anchor="center")
 
@@ -163,7 +173,7 @@ file_label = ctk.CTkLabel(app, text="No file selected", text_color="red", font=c
 file_label.place(relx=0.5, rely=0.65, anchor="center")
 
 # Unlock button
-unlock_icon = ctk.CTkImage(Image.open("asset/unlocker.png"), size=(25, 25))
+unlock_icon = ctk.CTkImage(Image.open(resource_path("asset/unlocker.png")), size=(25, 25))
 unlock_btn = ctk.CTkButton(app, text=" Unlock", image=unlock_icon, compound="left",
     fg_color="#23c55f", hover_color="#00b050", font=ctk.CTkFont(size=25, weight="bold"),
     width=410, height=40, command=unlock_action, bg_color="#B7E6F3")
