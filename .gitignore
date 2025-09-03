@@ -1,6 +1,7 @@
 .idea/
 .venv/
 .env/
-.vscode/
 __pycache__/
 *.pyc
+config.bat
+node_modules
