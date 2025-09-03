@@ -1,9 +1,10 @@
 .idea/
 .venv/
 .env/
-.vscode/
 __pycache__/
 *.pyc
 dist/
 build/
 unlocker.spec
+config.bat
+node_modules
