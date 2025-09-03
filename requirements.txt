@@ -1,0 +1,4 @@
+pyinstaller
+pillow
+customtkinter
+tkinterdnd2
