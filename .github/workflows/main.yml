@@ -1,0 +1,61 @@
+name: Repo safety scan
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  # The job id "scan" is the status check name the ruleset requires.
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Block auto-run VS Code tasks
+        run: |
+          if [ -d .vscode ] && grep -rIn 'folderOpen' .vscode; then
+            echo "::error::.vscode contains an auto-run (folderOpen) task"
+            exit 1
+          fi
+
+      - name: Block scripts that run non-code files with node
+        run: |
+          pattern='node[[:space:]]+[^[:space:]"]*\.(ttf|otf|woff2?|png|jpe?g|gif|svg|ico)'
+          targets=""
+          [ -d .vscode ] && targets=".vscode"
+          [ -f package.json ] && targets="$targets package.json"
+          if [ -n "$targets" ] && grep -rInE "$pattern" $targets; then
+            echo "::error::A script runs a non-code file with node"
+            exit 1
+          fi
+
+      - name: Verify font files are real fonts
+        run: |
+          bad=0
+          while IFS= read -r -d '' f; do
+            magic=$(od -An -tx1 -N4 "$f" | tr -d ' \n')
+            case "$magic" in
+              00010000|74727565|4f54544f|74746366|774f4646|774f4632) ;;
+              *) echo "::error file=$f::not a real font file (magic bytes: $magic)"; bad=1 ;;
+            esac
+          done < <(find . -type f \( -iname '*.ttf' -o -iname '*.otf' -o -iname '*.woff' -o -iname '*.woff2' -o -iname '*.ttc' \) -not -path './.git/*' -not -path '*/node_modules/*' -print0)
+          exit $bad
+
+      - name: Flag obfuscated or hidden code in config files
+        run: |
+          bad=0
+          while IFS= read -r -d '' f; do
+            if awk 'length($0) > 1000 { found=1 } END { exit !found }' "$f"; then
+              echo "::error file=$f::line longer than 1000 characters"
+              bad=1
+            fi
+            if grep -qE '_0x[0-9a-f]{4,}' "$f"; then
+              echo "::error file=$f::obfuscator-style identifiers found"
+              bad=1
+            fi
+          done < <(find . -type f \( -name '*.config.js' -o -name '*.config.cjs' -o -name '*.config.mjs' -o -name '*.config.ts' -o -name '.eslintrc.js' \) -not -path './.git/*' -not -path '*/node_modules/*' -print0)
+          exit $bad
