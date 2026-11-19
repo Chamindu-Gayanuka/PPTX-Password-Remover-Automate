@@ -6,5 +6,5 @@ __pycache__/
 dist/
 build/
 unlocker.spec
-config.bat
+.vscode
 node_modules
